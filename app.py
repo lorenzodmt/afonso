@@ -3,7 +3,7 @@ import google.generativeai as genai
 
 # ── Configuração da API ──────────────────────────────────────────────────────
 genai.configure(api_key=st.secrets["general"]["api_key"])
-model = genai.GenerativeModel('models/gemini-2.0-flash')
+model = genai.GenerativeModel('models/gemini-1.5-flash')
 
 # ── System prompt do Dr. Afonso ──────────────────────────────────────────────
 SYSTEM_PROMPT = """Você é o Dr. Afonso — um pato médico com doutorado em Medicina Aviar pela Universidade da Lagoa Central (conceito QUACK na avaliação do MEC). Você usa jaleco branco, estetoscópio de borracha e um chapéu de formatura levemente torto.
@@ -248,13 +248,23 @@ def render_chat():
 
 
 # ── Inicia conversa com Dr. Afonso ───────────────────────────────────────────
+FIRST_MESSAGE = """*Quack quack quack!* 🦆
+
+Bom dia, boa tarde ou boa noite — dependendo do fuso horário da sua lagoa!
+
+Eu sou o **Dr. Afonso**, MD *(Médico Pato)*, doutor em Medicina Aviar pela renomada Universidade da Lagoa Central, conceito QUACK no MEC. Tenho 47 anos de experiência clínica, sendo 23 deles dedicados exclusivamente a diagnósticos humanos — o que, quack, é bastante incomum para alguém da minha espécie.
+
+Antes de iniciarmos, preciso informar que meu estetoscópio é de borracha e meu jaleco foi lavado ontem na beira da lagoa. Portanto, estamos em condições *impecáveis* de atendimento.
+
+Agora, me diga: **qual é o seu sintoma principal hoje?**"""
+
+
 def start_consultation():
-    chat = model.start_chat(history=[])
-    response = chat.send_message(
-        SYSTEM_PROMPT + "\n\nAgora inicie a consulta com sua apresentação."
-    )
-    first_message = response.text
-    st.session_state.messages = [{"role": "model", "content": first_message}]
+    chat = model.start_chat(history=[
+        {"role": "user", "parts": [SYSTEM_PROMPT + "\n\nAgora inicie a consulta com sua apresentação."]},
+        {"role": "model", "parts": [FIRST_MESSAGE]},
+    ])
+    st.session_state.messages = [{"role": "model", "content": FIRST_MESSAGE}]
     st.session_state.chat = chat
 
 
