@@ -3,7 +3,7 @@ import google.generativeai as genai
 
 # ── Configuração da API ──────────────────────────────────────────────────────
 genai.configure(api_key=st.secrets["general"]["api_key"])
-model = genai.GenerativeModel('models/gemini-1.5-flash')
+model = genai.GenerativeModel('models/gemini-3.1-flash-lite-preview')
 
 # ── System prompt do Dr. Afonso ──────────────────────────────────────────────
 SYSTEM_PROMPT = """Você é o Dr. Afonso — um pato médico com doutorado em Medicina Aviar pela Universidade da Lagoa Central (conceito QUACK na avaliação do MEC). Você usa jaleco branco, estetoscópio de borracha e um chapéu de formatura levemente torto.
