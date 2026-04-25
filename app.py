@@ -294,22 +294,21 @@ def main():
     # Renderiza histórico
     render_chat()
 
-    # Área de input
+    # Área de input usando form para limpar o campo após envio
     st.markdown("<div style='height:1.5rem'></div>", unsafe_allow_html=True)
-    col1, col2 = st.columns([5, 1])
 
-    with col1:
-        user_input = st.text_input(
-            "mensagem",
-            placeholder="Descreva seus sintomas ao Dr. Afonso...",
-            key="user_input",
-            label_visibility="hidden"
-        )
+    with st.form(key="chat_form", clear_on_submit=True):
+        col1, col2 = st.columns([5, 1])
+        with col1:
+            user_input = st.text_input(
+                "mensagem",
+                placeholder="Descreva seus sintomas ao Dr. Afonso...",
+                label_visibility="hidden"
+            )
+        with col2:
+            send = st.form_submit_button("Enviar", use_container_width=True)
 
-    with col2:
-        send = st.button("Enviar", use_container_width=True)
-
-    # Nova consulta
+    # Nova consulta (fora do form)
     col3, col4, col5 = st.columns([2, 2, 2])
     with col4:
         if st.button("🔄 Nova consulta", use_container_width=True):
@@ -319,7 +318,7 @@ def main():
             st.rerun()
 
     # Processa envio
-    if (send or user_input) and user_input.strip():
+    if send and user_input.strip():
         user_text = user_input.strip()
         st.session_state.messages.append({"role": "user", "content": user_text})
 
